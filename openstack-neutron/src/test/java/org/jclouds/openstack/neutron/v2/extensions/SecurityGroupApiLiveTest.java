@@ -26,6 +26,7 @@ import org.jclouds.openstack.neutron.v2.domain.RuleDirection;
 import org.jclouds.openstack.neutron.v2.domain.RuleEthertype;
 import org.jclouds.openstack.neutron.v2.domain.RuleProtocol;
 import org.jclouds.openstack.neutron.v2.domain.SecurityGroup;
+import org.jclouds.openstack.neutron.v2.domain.Subnet;
 import org.jclouds.openstack.neutron.v2.internal.BaseNeutronApiLiveTest;
 import org.testng.annotations.Test;
 
@@ -46,6 +47,10 @@ public class SecurityGroupApiLiveTest extends BaseNeutronApiLiveTest {
 
          try {
             sgApi = api.getSecurityGroupApi(region).get();
+
+            for (Subnet subnet : api.getSubnetApi(region).list().concat().toList()) {
+               System.out.println("subnet: " + subnet.getName());
+            }
 
             securityGroup = sgApi.create(
                   SecurityGroup.createBuilder().name("jclouds-test").description("jclouds test security group")
