@@ -32,14 +32,17 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallRule;
 import org.jclouds.openstack.neutron.v2.domain.Firewall;
-import org.jclouds.openstack.neutron.v2.domain.FirewallPolicies;
 import org.jclouds.openstack.neutron.v2.domain.FirewallPolicy;
 import org.jclouds.openstack.neutron.v2.domain.FirewallRule;
-import org.jclouds.openstack.neutron.v2.domain.FirewallRules;
-import org.jclouds.openstack.neutron.v2.domain.Firewalls;
-import org.jclouds.openstack.neutron.v2.fallbacks.EmptyFirewallsFallback;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallRule;
 import org.jclouds.openstack.neutron.v2.functions.FirewallPolicyToPagedIterable;
 import org.jclouds.openstack.neutron.v2.functions.FirewallRuleToPagedIterable;
 import org.jclouds.openstack.neutron.v2.functions.FirewallToPagedIterable;
@@ -47,6 +50,7 @@ import org.jclouds.openstack.neutron.v2.functions.ParseFirewallPolicies;
 import org.jclouds.openstack.neutron.v2.functions.ParseFirewallRules;
 import org.jclouds.openstack.neutron.v2.functions.ParseFirewalls;
 import org.jclouds.openstack.v2_0.ServiceType;
+import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.openstack.v2_0.options.PaginationOptions;
 import org.jclouds.openstack.v2_0.services.Extension;
 import org.jclouds.rest.annotations.Fallback;
@@ -92,9 +96,9 @@ public interface FWaaSApi {
    @Named("firewall:list")
    @GET
    @ResponseParser(ParseFirewalls.class)
-   @Fallback(EmptyFirewallsFallback.class)
+   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
    @Path("/firewalls")
-   Firewalls list(PaginationOptions options);
+   PaginatedCollection<Firewall> list(PaginationOptions options);
 
    /**
     * Returns the details for a specific firewall.
@@ -120,7 +124,7 @@ public interface FWaaSApi {
    @POST
    @SelectJson("firewall")
    @Path("/firewalls")
-   Firewall create(@WrapWith("firewall") Firewall firewall);
+   Firewall create(@WrapWith("firewall") CreateFirewall firewall);
 
    /**
     * Update a firewall
@@ -135,7 +139,7 @@ public interface FWaaSApi {
    @SelectJson("firewall")
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   Firewall update(@PathParam("id") String id, @WrapWith("firewall") Firewall updateFirewall);
+   Firewall update(@PathParam("id") String id, @WrapWith("firewall") UpdateFirewall updateFirewall);
 
    /**
     * Deletes the specified firewall
@@ -153,7 +157,7 @@ public interface FWaaSApi {
    @POST
    @SelectJson("firewall_policy")
    @Path("/firewall_policies")
-   FirewallPolicy createFirewallPolicy(@WrapWith("firewall_policy") FirewallPolicy firewallPolicy);
+   FirewallPolicy createFirewallPolicy(@WrapWith("firewall_policy") CreateFirewallPolicy firewallPolicy);
 
    @Named("firewall:listPolicies")
    @GET
@@ -166,9 +170,9 @@ public interface FWaaSApi {
    @Named("firewall:listPolicies")
    @GET
    @ResponseParser(ParseFirewallPolicies.class)
-   @Fallback(EmptyFirewallsFallback.class)
+   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
    @Path("/firewall_policies")
-   FirewallPolicies listFirewallPolicies(PaginationOptions options);
+   PaginatedCollection<FirewallPolicy> listFirewallPolicies(PaginationOptions options);
 
    @Named("firewall:getPolicy")
    @GET
@@ -182,7 +186,7 @@ public interface FWaaSApi {
    @SelectJson("firewall_policy")
    @Fallback(NullOnNotFoundOr404.class)
    @Path("/firewall_policies/{id}")
-   FirewallPolicy updateFirewallPolicy(@PathParam("id") String id, @WrapWith("firewall_policy") FirewallPolicy updateFirewallPolicy);
+   FirewallPolicy updateFirewallPolicy(@PathParam("id") String id, @WrapWith("firewall_policy") UpdateFirewallPolicy updateFirewallPolicy);
 
    @Named("firewall:deletePolicy")
    @DELETE
@@ -193,7 +197,7 @@ public interface FWaaSApi {
    @POST
    @SelectJson("firewall_rule")
    @Path("/firewall_rules")
-   FirewallRule createFirewallRule(@WrapWith("firewall_rule") FirewallRule firewallRule);
+   FirewallRule createFirewallRule(@WrapWith("firewall_rule") CreateFirewallRule firewallRule);
 
    @Named("firewall:listFirewallRules")
    @GET
@@ -206,9 +210,9 @@ public interface FWaaSApi {
    @Named("firewall:listFirewallRules")
    @GET
    @ResponseParser(ParseFirewallRules.class)
-   @Fallback(EmptyFirewallsFallback.class)
+   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
    @Path("/firewall_rules")
-   FirewallRules listFirewallRules(PaginationOptions options);
+   PaginatedCollection<FirewallRule> listFirewallRules(PaginationOptions options);
 
    @Named("firewall:getFirewallRule")
    @GET
@@ -224,7 +228,7 @@ public interface FWaaSApi {
    @SelectJson("firewall_rule")
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
-   FirewallRule updateFirewallRule(@PathParam("id") String id, @WrapWith("firewall_rule") FirewallRule updateFirewallRule);
+   FirewallRule updateFirewallRule(@PathParam("id") String id, @WrapWith("firewall_rule") UpdateFirewallRule updateFirewallRule);
 
    @Named("firewall:deleteFirewallRule")
    @DELETE
@@ -245,6 +249,5 @@ public interface FWaaSApi {
    @Fallback(NullOnNotFoundOr404.class)
    @Nullable
    FirewallPolicy removeFirewallRuleFromPolicy(@PathParam("id") String policyId, @WrapWith("firewall_rule_id") String firewallRuleId);
-
 
 }

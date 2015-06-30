@@ -26,18 +26,25 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import org.jclouds.openstack.neutron.v2.NeutronApi;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallRule;
 import org.jclouds.openstack.neutron.v2.domain.Firewall;
 import org.jclouds.openstack.neutron.v2.domain.FirewallPolicy;
 import org.jclouds.openstack.neutron.v2.domain.FirewallRule;
-import org.jclouds.openstack.neutron.v2.domain.Firewalls;
 import org.jclouds.openstack.neutron.v2.domain.FloatingIP;
 import org.jclouds.openstack.neutron.v2.domain.FloatingIPs;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallRule;
 import org.jclouds.openstack.neutron.v2.internal.BaseNeutronApiMockTest;
+import org.jclouds.openstack.v2_0.domain.PaginatedCollection;
 import org.jclouds.openstack.v2_0.options.PaginationOptions;
 import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 
@@ -59,7 +66,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         Firewall firewallRequest = Firewall.builder()
+         CreateFirewall firewallRequest = CreateFirewall.builder()
                  .firewallPolicyId("c69933c1-b472-44f9-8226-30dc4ffd454c")
                  .adminStateUp(Boolean.TRUE)
                  .build();
@@ -83,7 +90,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          assertEquals(firewall.getDescription(), "");
          assertEquals(firewall.getId(), "3b0ef8f4-82c7-44d4-a4fb-6177f9a21977");
          assertEquals(firewall.getStatus(), "PENDING_CREATE");
-         assertEquals(firewall.isAdminStateUp(), true);
+         assertTrue(firewall.isAdminStateUp());
          assertEquals(firewall.getFirewallPolicyId(), "c69933c1-b472-44f9-8226-30dc4ffd454c");
       } finally {
          server.shutdown();
@@ -102,7 +109,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         Firewall firewallRequest = Firewall.builder()
+         CreateFirewall firewallRequest = CreateFirewall.builder()
                  .firewallPolicyId("c69933c1-b472-44f9-8226-30dc4ffd454c")
                  .adminStateUp(Boolean.TRUE)
                  .build();
@@ -123,7 +130,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         Firewalls firewalls = api.list(PaginationOptions.Builder.limit(2).marker("abcdefg"));
+         PaginatedCollection<Firewall> firewalls = api.list(PaginationOptions.Builder.limit(2).marker("abcdefg"));
 
          /*
           * Check request
@@ -138,7 +145,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
           */
          assertNotNull(firewalls);
          assertEquals(firewalls.size(), 1);
-         assertEquals(firewalls.first().get().getId(), "5eb708e7-3856-449a-99ac-fec27cd745f9");
+         assertEquals(Iterables.getFirst(firewalls, null).getId(), "5eb708e7-3856-449a-99ac-fec27cd745f9");
          assertEquals(firewalls.get(0).getId(), "5eb708e7-3856-449a-99ac-fec27cd745f9");
       } finally {
          server.shutdown();
@@ -320,7 +327,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         Firewall updateFirewall = Firewall.builder()
+         UpdateFirewall updateFirewall = UpdateFirewall.builder()
                .adminStateUp(false)
                .build();
 
@@ -356,7 +363,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         Firewall updateFirewall = Firewall.builder()
+         UpdateFirewall updateFirewall = UpdateFirewall.builder()
                  .adminStateUp(false)
                  .build();
 
@@ -450,7 +457,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallPolicy firewallPolicyRequest = FirewallPolicy.builder()
+         CreateFirewallPolicy firewallPolicyRequest = CreateFirewallPolicy.builder()
                  .name("jclouds-fw-policy_group-52-e8b")
                  .build();
 
@@ -492,7 +499,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallPolicy firewallPolicyRequest = FirewallPolicy.builder()
+         CreateFirewallPolicy firewallPolicyRequest = CreateFirewallPolicy.builder()
                  .name("jclouds-fw-policy_group-52-e8b")
                  .build();
 
@@ -582,7 +589,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallPolicy updateFirewallPolicy = FirewallPolicy.builder()
+         UpdateFirewallPolicy updateFirewallPolicy = UpdateFirewallPolicy.builder()
                  .shared(true)
                  .build();
 
@@ -623,7 +630,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallPolicy updateFirewallPolicy = FirewallPolicy.builder()
+         UpdateFirewallPolicy updateFirewallPolicy = UpdateFirewallPolicy.builder()
                  .shared(true)
                  .build();
 
@@ -708,8 +715,6 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
       }
    }
 
-   ////////////
-
    public void testCreateFirewallRule() throws IOException, InterruptedException, URISyntaxException {
       MockWebServer server = mockOpenStackServer();
       server.enqueue(addCommonHeaders(new MockResponse().setBody(stringFromResource("/access.json"))));
@@ -721,13 +726,14 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallRule firewallRuleRequest = FirewallRule.builder()
+         CreateFirewallRule firewallRuleRequest = CreateFirewallRule.builder()
                  .name("jclouds-fw-rule_group-52-e8b_port-22")
                  .tenantId("3e00d5716204446c8d3c47a466eec25a")
                  .protocol("tcp")
                  .destinationIpAddress("192.168.0.117")
                  .destinationPort("22")
                  .action("allow")
+                 .shared(false)
                  .enabled(true)
                  .build();
 
@@ -768,7 +774,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallRule firewallRuleRequest = FirewallRule.builder()
+         CreateFirewallRule firewallRuleRequest = CreateFirewallRule.builder()
                  .name("jclouds-fw-rule_group-52-e8b_port-22")
                  .build();
 
@@ -860,7 +866,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallRule updateFirewallRule = FirewallRule.builder()
+         UpdateFirewallRule updateFirewallRule = UpdateFirewallRule.builder()
                  .build();
 
          FirewallRule firewallRule = api.updateFirewallRule("12345", updateFirewallRule);
@@ -894,7 +900,7 @@ public class FWaaSApiMockTest extends BaseNeutronApiMockTest {
          NeutronApi neutronApi = api(server.getUrl("/").toString(), "openstack-neutron", overrides);
          FWaaSApi api = neutronApi.getFWaaSApi("RegionOne").get();
 
-         FirewallRule updateFirewallRule = FirewallRule.builder()
+         UpdateFirewallRule updateFirewallRule = UpdateFirewallRule.builder()
                  .build();
 
          FirewallRule firewallRule = api.updateFirewallRule("12345", updateFirewallRule);

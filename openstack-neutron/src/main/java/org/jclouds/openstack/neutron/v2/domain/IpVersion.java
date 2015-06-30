@@ -14,25 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.jclouds.openstack.neutron.v2.domain;
 
-package org.jclouds.openstack.neutron.v2.fallbacks;
+public enum IpVersion {
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Throwables.propagate;
-import static org.jclouds.http.HttpUtils.contains404;
-import static org.jclouds.util.Throwables2.getFirstThrowableOfType;
+   IPV4(4),
+   IPV6(6),
+   UNRECOGNIZED(Integer.MAX_VALUE);;
 
-import org.jclouds.Fallback;
-import org.jclouds.openstack.neutron.v2.domain.Firewalls;
-import org.jclouds.rest.ResourceNotFoundException;
+   private final int version;
 
-public class EmptyFirewallsFallback implements Fallback<Firewalls> {
-   @Override
-   public Firewalls createOrPropagate(Throwable t) throws Exception {
-      if ((getFirstThrowableOfType(checkNotNull(t, "throwable"), ResourceNotFoundException.class) != null)
-            || contains404(t)) {
-         return Firewalls.EMPTY;
+   IpVersion(int version) {
+      this.version = version;
+   }
+
+   public int version() {
+      return this.version;
+   }
+
+   public static IpVersion fromValue(String value) {
+      try {
+         int statusCode = Integer.parseInt(value);
+         switch (statusCode) {
+            case 4:
+               return IpVersion.IPV4;
+            case 6:
+               return IpVersion.IPV6;
+            default:
+               return IpVersion.IPV4;
+         }
+      } catch (NumberFormatException e) {
+         return IpVersion.UNRECOGNIZED;
       }
-      throw propagate(t);
    }
 }

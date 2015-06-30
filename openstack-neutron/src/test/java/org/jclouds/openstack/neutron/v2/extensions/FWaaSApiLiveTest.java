@@ -22,9 +22,15 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.CreateFirewallRule;
 import org.jclouds.openstack.neutron.v2.domain.Firewall;
 import org.jclouds.openstack.neutron.v2.domain.FirewallPolicy;
 import org.jclouds.openstack.neutron.v2.domain.FirewallRule;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewall;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallPolicy;
+import org.jclouds.openstack.neutron.v2.domain.UpdateFirewallRule;
 import org.jclouds.openstack.neutron.v2.internal.BaseNeutronApiLiveTest;
 import org.jclouds.openstack.v2_0.options.PaginationOptions;
 import org.testng.Assert;
@@ -59,7 +65,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
 
       try {
          // methods under test
-         firewallRule = fWaaSApi.createFirewallRule(FirewallRule.builder()
+         firewallRule = fWaaSApi.createFirewallRule(CreateFirewallRule.builder()
                  .name(String.format("jclouds-test-%s-fw-rule-%s", this.getClass().getCanonicalName().toLowerCase(), inboundPort))
                  .description("jclouds test fw rule")
                  .destinationIpAddress("192.168.0.1")
@@ -78,7 +84,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
          assertEquals(firewallRule.getDescription(), "jclouds test fw rule");
 
          // update
-         FirewallRule updatedFirewallRule = fWaaSApi.updateFirewallRule(firewallRule.getId(), FirewallRule.builder().name(firewallRule.getName() + "-updated").build());
+         FirewallRule updatedFirewallRule = fWaaSApi.updateFirewallRule(firewallRule.getId(), UpdateFirewallRule.builder().name(firewallRule.getName() + "-updated").build());
          firewallRule = fWaaSApi.getFirewallRule(firewallRule.getId());
          assertEquals(updatedFirewallRule, firewallRule);
       } finally {
@@ -92,7 +98,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
    public void testCreateUpdateAndDeleteFirewallPolicy() {
 
       String inboundPort = "80";
-      FirewallRule firewallRule = fWaaSApi.createFirewallRule(FirewallRule.builder()
+      FirewallRule firewallRule = fWaaSApi.createFirewallRule(CreateFirewallRule.builder()
               .name(String.format("jclouds-test-%s-fw-rule-%s", this.getClass().getCanonicalName().toLowerCase(), inboundPort))
               .description("jclouds test fw rule")
               .destinationIpAddress("192.168.0.1")
@@ -105,7 +111,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
 
       try {
          // methods under test
-         firewallPolicy = fWaaSApi.createFirewallPolicy(FirewallPolicy.builder()
+         firewallPolicy = fWaaSApi.createFirewallPolicy(CreateFirewallPolicy.builder()
                  .name(String.format("jclouds-test-%s-fw-policy", this.getClass().getCanonicalName().toLowerCase()))
                  .description("jclouds test fw policy")
                  .build());
@@ -119,7 +125,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
          assertEquals(firewallPolicy.getDescription(), "jclouds test fw policy");
 
          // update
-         FirewallPolicy updatedFirewallPolicy = fWaaSApi.updateFirewallPolicy(firewallPolicy.getId(), FirewallPolicy.builder()
+         FirewallPolicy updatedFirewallPolicy = fWaaSApi.updateFirewallPolicy(firewallPolicy.getId(), UpdateFirewallPolicy.builder()
                  .name(String.format("jclouds-test-%s-fw-policy-update", this.getClass().getCanonicalName().toLowerCase())).build());
          firewallPolicy = fWaaSApi.getFirewallPolicy(firewallPolicy.getId());
          assertEquals(updatedFirewallPolicy, firewallPolicy);
@@ -147,7 +153,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
 
    public void testCreateUpdateAndDeleteFirewall() {
 
-      FirewallPolicy firewallPolicy = fWaaSApi.createFirewallPolicy(FirewallPolicy.builder()
+      FirewallPolicy firewallPolicy = fWaaSApi.createFirewallPolicy(CreateFirewallPolicy.builder()
               .name(String.format("jclouds-test-%s-fw-policy", this.getClass().getCanonicalName().toLowerCase()))
               .description("jclouds test fw policy")
               .build());
@@ -156,7 +162,7 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
 
       try {
          // methods under test
-         firewall = fWaaSApi.create(Firewall.builder().name(String.format("jclouds-test-%s-fw", this.getClass().getCanonicalName().toLowerCase()))
+         firewall = fWaaSApi.create(CreateFirewall.builder().name(String.format("jclouds-test-%s-fw", this.getClass().getCanonicalName().toLowerCase()))
                  .description("jclouds test firewall")
                  .firewallPolicyId(firewallPolicy.getId())
                  .build());
@@ -170,7 +176,8 @@ public class FWaaSApiLiveTest extends BaseNeutronApiLiveTest {
          assertEquals(firewall.getDescription(), "jclouds test firewall");
 
          // update
-         Firewall updatedFirewall = fWaaSApi.update(firewall.getId(), Firewall.builder().name(String.format("jclouds-test-%s-fw_updated", this.getClass().getCanonicalName().toLowerCase())).build());
+         Firewall updatedFirewall = fWaaSApi.update(firewall.getId(), UpdateFirewall.builder().name(String.format("jclouds-test-%s-fw_updated", this.getClass()
+                 .getCanonicalName().toLowerCase())).build());
          firewall = fWaaSApi.get(firewall.getId());
          assertEquals(updatedFirewall, firewall);
 
