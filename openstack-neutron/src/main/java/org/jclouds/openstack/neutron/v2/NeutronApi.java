@@ -22,13 +22,13 @@ import java.util.Set;
 import javax.ws.rs.Path;
 
 import org.jclouds.location.Region;
+import org.jclouds.openstack.neutron.v2.extensions.FWaaSApi;
 import org.jclouds.openstack.neutron.v2.extensions.FloatingIPApi;
 import org.jclouds.openstack.neutron.v2.extensions.RouterApi;
-import org.jclouds.openstack.neutron.v2.extensions.SecurityGroupApi;
 import org.jclouds.openstack.neutron.v2.extensions.lbaas.v1.LBaaSApi;
-import org.jclouds.openstack.neutron.v2.extensions.FWaaSApi;
 import org.jclouds.openstack.neutron.v2.features.NetworkApi;
 import org.jclouds.openstack.neutron.v2.features.PortApi;
+import org.jclouds.openstack.neutron.v2.features.SecurityGroupApi;
 import org.jclouds.openstack.neutron.v2.features.SubnetApi;
 import org.jclouds.openstack.neutron.v2.functions.VersionAwareRegionToEndpoint;
 import org.jclouds.openstack.v2_0.features.ExtensionApi;
@@ -83,6 +83,11 @@ public interface NeutronApi extends Closeable {
    PortApi getPortApi(@EndpointParam(parser = VersionAwareRegionToEndpoint.class) String region);
 
    /**
+    * Provides access to Security Group features.
+    */
+   @Delegate
+   SecurityGroupApi getSecurityGroupApi(@EndpointParam(parser = VersionAwareRegionToEndpoint.class) String region);
+   /**
     * Provides access to Router features.
     *
     * <h3>NOTE</h3>
@@ -110,7 +115,7 @@ public interface NeutronApi extends Closeable {
     * to determine if it is present.
     */
    @Delegate
-   Optional<SecurityGroupApi> getSecurityGroupApi(@EndpointParam(parser = VersionAwareRegionToEndpoint.class) String region);
+   Optional<org.jclouds.openstack.neutron.v2.extensions.SecurityGroupApi> getSecurityGroupExtensionsApi(@EndpointParam(parser = VersionAwareRegionToEndpoint.class) String region);
 
    /**
     * Provides access to LBaaS features.

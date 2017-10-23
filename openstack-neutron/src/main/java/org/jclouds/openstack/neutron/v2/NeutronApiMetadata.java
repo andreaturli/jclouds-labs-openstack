@@ -23,10 +23,9 @@ import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.v3.config.AuthenticationApiModule;
+import org.jclouds.openstack.keystone.v3.config.KeystoneAuthenticationModule;
 import org.jclouds.openstack.neutron.v2.config.NeutronHttpApiModule;
 import org.jclouds.openstack.v2_0.ServiceType;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
@@ -78,7 +77,7 @@ public class NeutronApiMetadata extends BaseHttpApiMetadata<NeutronApi> {
             .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
                .add(AuthenticationApiModule.class)
                .add(KeystoneAuthenticationModule.class)
-               .add(RegionModule.class)
+               .add(KeystoneAuthenticationModule.RegionModule.class)
                .add(NeutronHttpApiModule.class).build());
       }
 
