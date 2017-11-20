@@ -21,6 +21,7 @@ import com.google.common.collect.FluentIterable;
 import org.jclouds.Fallbacks;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.neutron.v2_0.domain.Port;
 import org.jclouds.openstack.neutron.v2_0.domain.ReferenceWithName;
@@ -50,9 +51,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 
-import static org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
-import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
-
 /**
  * Provides access to Port operations for the OpenStack Networking (Neutron) v2 API.
  * <p/>
@@ -81,7 +79,7 @@ public interface PortApi {
    @GET
    @ResponseParser(ParsePorts.class)
    @Transform(ParsePorts.ToPagedIterable.class)
-   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    @QueryParams(keys = {"fields", "fields", "fields"}, values = {"id", "tenant_id", "name"})
    PagedIterable<? extends ReferenceWithName> list();
 
@@ -91,7 +89,7 @@ public interface PortApi {
    @Named("port:list")
    @GET
    @ResponseParser(ParsePorts.class)
-   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404.class)
    @QueryParams(keys = {"fields", "fields", "fields"}, values = {"id", "tenant_id", "name"})
    PagedIterable<? extends ReferenceWithName> list(PaginationOptions options);
 
@@ -104,7 +102,7 @@ public interface PortApi {
    @GET
    @ResponseParser(ParsePortDetails.class)
    @Transform(ParsePortDetails.ToPagedIterable.class)
-   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<? extends Port> listInDetail();
 
    /**
@@ -113,7 +111,7 @@ public interface PortApi {
    @Named("port:list")
    @GET
    @ResponseParser(ParsePortDetails.class)
-   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404.class)
    PagedIterable<? extends Port> listInDetail(PaginationOptions options);
 
    /**

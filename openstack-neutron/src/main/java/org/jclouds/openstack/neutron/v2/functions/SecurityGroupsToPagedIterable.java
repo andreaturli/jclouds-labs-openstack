@@ -46,7 +46,7 @@ public class SecurityGroupsToPagedIterable extends
    @Override
    protected Function<Object, IterableWithMarker<SecurityGroup>> markerToNextForArg0(Optional<Object> arg0) {
       String region = arg0.isPresent() ? arg0.get().toString() : null;
-      final SecurityGroupApi securityGroupApi = api.getSecurityGroupApi(region).get();
+      final SecurityGroupApi securityGroupApi = api.getExtensionSecurityGroupApi(region).get();
       return new Function<Object, IterableWithMarker<SecurityGroup>>() {
 
          @SuppressWarnings("unchecked")

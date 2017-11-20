@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
 
+import com.google.common.collect.Iterables;
 import org.jclouds.openstack.neutron.v2_0.domain.AllocationPool;
 import org.jclouds.openstack.neutron.v2_0.domain.BulkSubnet;
 import org.jclouds.openstack.neutron.v2_0.domain.HostRoute;
@@ -41,6 +42,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import javax.annotation.Nullable;
+
 /**
  * Tests subnet api in combination with the network api
  *
@@ -57,10 +60,14 @@ public class SubnetApiLiveTest extends BaseNeutronApiLiveTest {
          assertNotNull(subnets);
          assertEquals(references.size(), subnets.size());
 
-         for (Subnet subnet : subnets) {
+         for (final Subnet subnet : subnets) {
             assertNotNull(subnet.getNetworkId());
-            assertTrue(references.contains(ReferenceWithName.builder().id(subnet.getId()).tenantId(subnet.getTenantId()).name(subnet.getName()).build()));
-
+            assertTrue(Iterables.any(references, new Predicate<ReferenceWithName>() {
+               @Override
+               public boolean apply(@Nullable ReferenceWithName input) {
+                  return input == subnet;
+               }
+            }));
             Subnet retrievedSubnet = api.getSubnetApiForZone(zone).get(subnet.getId());
             assertEquals(retrievedSubnet, subnet);
          }

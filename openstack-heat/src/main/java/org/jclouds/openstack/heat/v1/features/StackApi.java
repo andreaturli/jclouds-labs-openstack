@@ -95,9 +95,7 @@ public interface StackApi {
    @Named("stack:update")
    @PUT
    @Path("/{stack_name}/{stack_id}")
-   @Nullable
    boolean update(@PathParam("stack_name") String name, @PathParam("stack_id") String id, @BinderParam(BindToJsonPayload.class) UpdateStack options);
-
 
    @Named("stack:list_resources")
    @GET

@@ -16,7 +16,7 @@
  */
 package org.jclouds.openstack.neutron.v2.config;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneHttpApiModule.aliasBinder;
+import static org.jclouds.openstack.keystone.v2_0.config.KeystoneHttpApiModule.namespaceAliasBinder;
 
 import java.net.URI;
 import java.util.Set;
@@ -35,7 +35,7 @@ import org.jclouds.openstack.neutron.v2.NeutronApi;
 import org.jclouds.openstack.neutron.v2.extensions.ExtensionNamespaces;
 import org.jclouds.openstack.neutron.v2.handlers.NeutronErrorHandler;
 import org.jclouds.openstack.v2_0.domain.Extension;
-import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet;
+import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationMatchesExtensionSet;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 import org.jclouds.rest.functions.ImplicitOptionalConverter;
@@ -56,13 +56,13 @@ public class NeutronHttpApiModule extends HttpApiModule<NeutronApi> {
    @Override
    protected void configure() {
       bind(DateAdapter.class).to(Iso8601DateAdapter.class);
-      bind(ImplicitOptionalConverter.class).to(PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet.class);
+      bind(ImplicitOptionalConverter.class).to(PresentWhenExtensionAnnotationMatchesExtensionSet.class);
       super.configure();
       bindAliases();
    }
 
    private void bindAliases() {
-      MapBinder<URI, URI> aliases = aliasBinder(binder());
+      MapBinder<URI, URI> aliases = namespaceAliasBinder(binder());
       aliases.addBinding(URI.create(ExtensionNamespaces.L3_ROUTER)).toInstance(
             URI.create("http://docs.openstack.org/ext/neutron/router/api/v1.0"));
       aliases.addBinding(URI.create(ExtensionNamespaces.SECURITY_GROUPS)).toInstance(

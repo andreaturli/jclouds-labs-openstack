@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.openstack.neutron.v2_0.domain.BulkNetwork;
 import org.jclouds.openstack.neutron.v2_0.domain.NetworkType;
+import org.jclouds.openstack.neutron.v2_0.options.CreateNetworkOptions.CreateNetworkRequest;
 import org.jclouds.rest.MapBinder;
 import org.jclouds.rest.binders.BindToJsonPayload;
 
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.openstack.neutron.v2_0.options.CreateNetworkOptions.CreateNetworkRequest;
 
 public class CreateNetworkBulkOptions implements MapBinder {
 

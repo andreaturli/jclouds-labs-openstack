@@ -22,7 +22,7 @@ import java.beans.ConstructorProperties;
 import java.net.URI;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Cloud Big Data CreateCluster.

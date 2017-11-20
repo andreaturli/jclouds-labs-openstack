@@ -23,6 +23,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
 
+import com.google.common.collect.Iterables;
 import org.jclouds.openstack.neutron.v2_0.domain.BulkPort;
 import org.jclouds.openstack.neutron.v2_0.domain.IP;
 import org.jclouds.openstack.neutron.v2_0.domain.NetworkType;
@@ -41,6 +42,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import javax.annotation.Nullable;
+
 /**
  * Tests PortApi in combination with the Network & SubnetApi
  *
@@ -57,9 +60,14 @@ public class PortApiLiveTest extends BaseNeutronApiLiveTest {
          assertNotNull(ports);
          assertEquals(references.size(), ports.size());
 
-         for (Port port : ports) {
+         for (final Port port : ports) {
             assertNotNull(port.getName());
-            assertTrue(references.contains(ReferenceWithName.builder().id(port.getId()).tenantId(port.getTenantId()).name(port.getName()).build()));
+            assertTrue(Iterables.any(references, new Predicate<ReferenceWithName>() {
+               @Override
+               public boolean apply(@Nullable ReferenceWithName input) {
+                  return input == port;
+               }
+            }));
 
             Port retrievedPort = api.getPortApiForZone(zone).get(port.getId());
             assertEquals(port, retrievedPort);

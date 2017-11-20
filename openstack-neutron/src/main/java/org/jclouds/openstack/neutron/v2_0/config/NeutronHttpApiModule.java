@@ -16,7 +16,7 @@
  */
 package org.jclouds.openstack.neutron.v2_0.config;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneHttpApiModule.aliasBinder;
+import static org.jclouds.openstack.keystone.v2_0.config.KeystoneHttpApiModule.namespaceAliasBinder;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +33,7 @@ import org.jclouds.json.config.GsonModule.Iso8601DateAdapter;
 import org.jclouds.openstack.neutron.v2_0.NeutronApi;
 import org.jclouds.openstack.neutron.v2_0.handlers.NeutronErrorHandler;
 import org.jclouds.openstack.v2_0.domain.Extension;
-import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet;
+import org.jclouds.openstack.v2_0.functions.PresentWhenExtensionAnnotationMatchesExtensionSet;
 import org.jclouds.rest.ConfiguresHttpApi;
 import org.jclouds.rest.config.HttpApiModule;
 import org.jclouds.rest.functions.ImplicitOptionalConverter;
@@ -52,9 +52,9 @@ public class NeutronHttpApiModule extends HttpApiModule<NeutronApi> {
    @Override
    protected void configure() {
       bind(DateAdapter.class).to(Iso8601DateAdapter.class);
-      bind(ImplicitOptionalConverter.class).to(PresentWhenExtensionAnnotationNamespaceEqualsAnyNamespaceInExtensionsSet.class);
+      bind(ImplicitOptionalConverter.class).to(PresentWhenExtensionAnnotationMatchesExtensionSet.class);
       super.configure();
-      aliasBinder(binder());
+      namespaceAliasBinder(binder());
    }
    
    @Provides

@@ -22,6 +22,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
 
+import com.google.common.collect.Iterables;
 import org.jclouds.openstack.neutron.v2_0.domain.BulkNetwork;
 import org.jclouds.openstack.neutron.v2_0.domain.Network;
 import org.jclouds.openstack.neutron.v2_0.domain.NetworkType;
@@ -36,6 +37,8 @@ import org.testng.annotations.Test;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+
+import javax.annotation.Nullable;
 
 /**
  * Tests parsing and Guice wiring of NetworkApi
@@ -53,10 +56,14 @@ public class NetworkApiLiveTest extends BaseNeutronApiLiveTest {
          assertNotNull(networks);
          assertEquals(references.size(), networks.size());
 
-         for (Network network : networks) {
+         for (final Network network : networks) {
             assertNotNull(network.getName());
-            assertTrue(references.contains(ReferenceWithName.builder().id(network.getId()).tenantId(network.getTenantId()).name(network.getName()).build()));
-
+            assertTrue(Iterables.any(references, new Predicate<ReferenceWithName>() {
+               @Override
+               public boolean apply(@Nullable ReferenceWithName input) {
+                  return input == network;
+               }
+            }));
             Network retrievedNetwork = api.getNetworkApiForZone(zone).get(network.getId());
             assertEquals(network, retrievedNetwork);
          }

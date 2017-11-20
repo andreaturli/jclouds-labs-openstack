@@ -21,12 +21,12 @@ import java.util.Set;
 
 import javax.inject.Named;
 
+import com.google.common.base.MoreObjects;
 import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.openstack.v2_0.domain.Link;
 import org.jclouds.openstack.v2_0.domain.Resource;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.base.Optional;
 
 /**
@@ -174,7 +174,7 @@ public class Image extends Resource {
             && Objects.equal(this.checksum, that.checksum);
    }
 
-   protected ToStringHelper string() {
+   protected MoreObjects.ToStringHelper string() {
       return super.string()
             .add("containerFormat", containerFormat).add("diskFormat", diskFormat).add("size", size).add("checksum", checksum);
    }

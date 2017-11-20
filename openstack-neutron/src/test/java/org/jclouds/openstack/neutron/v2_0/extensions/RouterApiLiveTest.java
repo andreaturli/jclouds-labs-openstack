@@ -23,6 +23,8 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import org.jclouds.openstack.neutron.v2_0.domain.ExternalGatewayInfo;
 import org.jclouds.openstack.neutron.v2_0.domain.Network;
 import org.jclouds.openstack.neutron.v2_0.domain.NetworkType;
@@ -40,6 +42,8 @@ import org.jclouds.openstack.neutron.v2_0.options.CreateRouterOptions;
 import org.jclouds.openstack.neutron.v2_0.options.UpdateRouterOptions;
 import org.testng.annotations.Test;
 
+import javax.annotation.Nullable;
+
 /**
  * Tests parsing and Guice wiring of RouterApi
  *
@@ -56,11 +60,14 @@ public class RouterApiLiveTest extends BaseNeutronApiLiveTest {
          assertNotNull(routers);
          assertEquals(references.size(), routers.size());
 
-         for (Router router : routers) {
+         for (final Router router : routers) {
             assertNotNull(router.getName());
-            assertTrue(references.contains(ReferenceWithName.builder().id(router.getId()).tenantId(router.getTenantId()).name(router.getName()).build()));
-
-            Router retrievedRouter = api.getRouterExtensionForZone(zone).get().get(router.getId());
+            assertTrue(Iterables.any(references, new Predicate<ReferenceWithName>() {
+               @Override
+               public boolean apply(@Nullable ReferenceWithName input) {
+                  return input == router;
+               }
+            }));            Router retrievedRouter = api.getRouterExtensionForZone(zone).get().get(router.getId());
             assertEquals(router, retrievedRouter);
          }
       }

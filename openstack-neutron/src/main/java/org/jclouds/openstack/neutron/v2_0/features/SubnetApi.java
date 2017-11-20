@@ -21,6 +21,7 @@ import com.google.common.collect.FluentIterable;
 import org.jclouds.Fallbacks;
 import org.jclouds.collect.PagedIterable;
 import org.jclouds.javax.annotation.Nullable;
+import org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks;
 import org.jclouds.openstack.keystone.v2_0.filters.AuthenticateRequest;
 import org.jclouds.openstack.neutron.v2_0.domain.ReferenceWithName;
 import org.jclouds.openstack.neutron.v2_0.domain.Subnet;
@@ -49,9 +50,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 
-import static org.jclouds.Fallbacks.EmptyPagedIterableOnNotFoundOr404;
-import static org.jclouds.openstack.keystone.v2_0.KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404;
-
 /**
  * Provides access to Subnet operations for the OpenStack Networking (Neutron) v2 API.
  *
@@ -77,7 +75,7 @@ public interface SubnetApi {
    @GET
    @ResponseParser(ParseSubnets.class)
    @Transform(ParseSubnets.ToPagedIterable.class)
-   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    @QueryParams(keys = {"fields", "fields", "fields"}, values = {"id", "tenant_id", "name"})
    PagedIterable<? extends ReferenceWithName> list();
 
@@ -87,7 +85,7 @@ public interface SubnetApi {
    @Named("subnet:list")
    @GET
    @ResponseParser(ParseSubnets.class)
-   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404.class)
    @QueryParams(keys = {"fields", "fields", "fields"}, values = {"id", "tenant_id", "name"})
    PagedIterable<? extends ReferenceWithName> list(PaginationOptions options);
 
@@ -100,7 +98,7 @@ public interface SubnetApi {
    @GET
    @ResponseParser(ParseSubnetDetails.class)
    @Transform(ParseSubnetDetails.ToPagedIterable.class)
-   @Fallback(EmptyPagedIterableOnNotFoundOr404.class)
+   @Fallback(Fallbacks.EmptyPagedIterableOnNotFoundOr404.class)
    PagedIterable<? extends Subnet> listInDetail();
 
    /**
@@ -109,7 +107,7 @@ public interface SubnetApi {
    @Named("subnet:list")
    @GET
    @ResponseParser(ParseSubnetDetails.class)
-   @Fallback(EmptyPaginatedCollectionOnNotFoundOr404.class)
+   @Fallback(KeystoneFallbacks.EmptyPaginatedCollectionOnNotFoundOr404.class)
    PagedIterable<? extends Subnet> listInDetail(PaginationOptions options);
 
    /**
