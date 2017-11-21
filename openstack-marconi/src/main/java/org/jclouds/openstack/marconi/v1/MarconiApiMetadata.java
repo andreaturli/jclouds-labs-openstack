@@ -24,10 +24,7 @@ import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
-import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.openstack.marconi.v1.config.MarconiHttpApiModule;
 import org.jclouds.openstack.marconi.v1.config.MarconiTypeAdapters;
 import org.jclouds.openstack.v2_0.ServiceType;
@@ -77,10 +74,7 @@ public class MarconiApiMetadata extends BaseHttpApiMetadata<MarconiApi> {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(MarconiApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                     .add(AuthenticationApiModule.class)
-                                     .add(KeystoneAuthenticationModule.class)
                                      .add(OkHttpCommandExecutorServiceModule.class)
-                                     .add(RegionModule.class)
                                      .add(MarconiTypeAdapters.class)
                                      .add(MarconiHttpApiModule.class).build());
       }

@@ -24,10 +24,7 @@ import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.http.okhttp.config.OkHttpCommandExecutorServiceModule;
-import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.ProviderModule;
 import org.jclouds.openstack.poppy.v1.config.PoppyHttpApiModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
@@ -74,10 +71,7 @@ public class PoppyApiMetadata extends BaseHttpApiMetadata<PoppyApi> {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(PoppyApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                           .add(AuthenticationApiModule.class)
-                           .add(KeystoneAuthenticationModule.class)
                            .add(OkHttpCommandExecutorServiceModule.class)
-                           .add(ProviderModule.class)
                            .add(PoppyHttpApiModule.class).build());
       }
 

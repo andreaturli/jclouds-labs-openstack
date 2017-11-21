@@ -24,10 +24,7 @@ import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.heat.v1.config.HeatHttpApiModule;
-import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
 import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.auto.service.AutoService;
@@ -73,9 +70,6 @@ public class HeatApiMetadata extends BaseHttpApiMetadata<HeatApi> {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(HeatApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                           .add(AuthenticationApiModule.class)
-                           .add(KeystoneAuthenticationModule.class)
-                           .add(RegionModule.class)
                            .add(HeatHttpApiModule.class).build());
       }
 
