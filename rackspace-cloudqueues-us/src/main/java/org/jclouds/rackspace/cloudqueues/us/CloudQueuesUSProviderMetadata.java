@@ -19,20 +19,19 @@ package org.jclouds.rackspace.cloudqueues.us;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
 import org.jclouds.openstack.marconi.v1.MarconiApiMetadata;
 import org.jclouds.openstack.marconi.v1.config.MarconiHttpApiModule;
 import org.jclouds.openstack.marconi.v1.config.MarconiTypeAdapters;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
@@ -90,10 +89,10 @@ public class CloudQueuesUSProviderMetadata extends BaseProviderMetadata {
                   .endpointName("Rackspace Cloud Identity service URL ending in /v2.0/")
                   .documentation(URI.create("http://docs.rackspace.com/queues/api/v1.0/cq-devguide/content/overview.html"))
                   .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                              .add(CloudIdentityAuthenticationApiModule.class)
-                                              .add(CloudIdentityAuthenticationModule.class)
-                                              .add(RegionModule.class)
-                                              .add(MarconiTypeAdapters.class)
+                          .add(CloudIdentityAuthenticationModule.class)
+                          .add(ServiceCatalogModule.class)
+                          .add(ServiceCatalogModule.RegionModule.class)
+                          .add(MarconiTypeAdapters.class)
                                               .add(MarconiHttpApiModule.class).build())
                   .build())
          .homepage(URI.create("http://www.rackspace.com/cloud/queues/"))

@@ -16,25 +16,24 @@
  */
 package org.jclouds.rackspace.autoscale.v1;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
-
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.auth.config.CredentialTypes;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleParserModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 /**
  * Implementation of {@link org.jclouds.apis.ApiMetadata} for the Rackspace Auto Scale API.
@@ -77,9 +76,9 @@ public class AutoscaleApiMetadata extends BaseHttpApiMetadata<AutoscaleApi> {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(AutoscaleApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-               .add(CloudIdentityAuthenticationApiModule.class)
                .add(CloudIdentityAuthenticationModule.class)
-               .add(RegionModule.class)
+               .add(ServiceCatalogModule.class)
+               .add(ServiceCatalogModule.RegionModule.class)
                .add(AutoscaleParserModule.class)
                .add(AutoscaleHttpApiModule.class)
                .build());

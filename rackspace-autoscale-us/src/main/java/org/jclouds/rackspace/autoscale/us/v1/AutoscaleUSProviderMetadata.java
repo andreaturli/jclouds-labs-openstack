@@ -19,21 +19,20 @@ package org.jclouds.rackspace.autoscale.us.v1;
 import static org.jclouds.location.reference.LocationConstants.ISO3166_CODES;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGION;
 import static org.jclouds.location.reference.LocationConstants.PROPERTY_REGIONS;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 import java.net.URI;
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.auth.config.AuthenticationModule;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
 import org.jclouds.providers.ProviderMetadata;
 import org.jclouds.providers.internal.BaseProviderMetadata;
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApiMetadata;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleHttpApiModule;
 import org.jclouds.rackspace.autoscale.v1.config.AutoscaleParserModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationApiModule;
-import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityAuthenticationModule;
 import org.jclouds.rackspace.cloudidentity.v2_0.config.CloudIdentityCredentialTypes;
 
 import com.google.common.collect.ImmutableSet;
@@ -93,9 +92,9 @@ public class AutoscaleUSProviderMetadata extends BaseProviderMetadata {
                .documentation(URI.create("http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/Overview.html"))
                .version("1.0")
                .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                     .add(CloudIdentityAuthenticationApiModule.class)
-                     .add(CloudIdentityAuthenticationModule.class)
-                     .add(RegionModule.class)
+                     .add(AuthenticationModule.class)
+                     .add(ServiceCatalogModule.class)
+                     .add(ServiceCatalogModule.RegionModule.class)
                      .add(AutoscaleParserModule.class)
                      .add(AutoscaleHttpApiModule.class)
                      .build())

@@ -16,15 +16,15 @@
  */
 package org.jclouds.rackspace.autoscale.v1.internal;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
-
 import java.util.Properties;
 
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
+import org.jclouds.openstack.keystone.auth.config.CredentialTypes;
 import org.jclouds.openstack.v2_0.internal.BaseOpenStackMockTest;
 import org.jclouds.rackspace.autoscale.v1.AutoscaleApi;
 import org.jclouds.rackspace.cloudidentity.v2_0.ServiceType;
+
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 /**
  * Base class for writing Autoscale Expect tests

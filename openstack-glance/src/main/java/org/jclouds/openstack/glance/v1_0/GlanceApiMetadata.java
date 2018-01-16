@@ -16,24 +16,23 @@
  */
 package org.jclouds.openstack.glance.v1_0;
 
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.CREDENTIAL_TYPE;
-import static org.jclouds.openstack.keystone.v2_0.config.KeystoneProperties.SERVICE_TYPE;
-
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.openstack.glance.v1_0.config.GlanceHttpApiModule;
-import org.jclouds.openstack.keystone.v2_0.config.AuthenticationApiModule;
-import org.jclouds.openstack.keystone.v2_0.config.CredentialTypes;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule;
-import org.jclouds.openstack.keystone.v2_0.config.KeystoneAuthenticationModule.RegionModule;
+import org.jclouds.openstack.keystone.auth.config.AuthenticationModule;
+import org.jclouds.openstack.keystone.auth.config.CredentialTypes;
+import org.jclouds.openstack.keystone.catalog.config.ServiceCatalogModule;
 import org.jclouds.openstack.v2_0.ServiceType;
 import org.jclouds.rest.internal.BaseHttpApiMetadata;
 
 import com.google.auto.service.AutoService;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
+
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.CREDENTIAL_TYPE;
+import static org.jclouds.openstack.keystone.config.KeystoneProperties.SERVICE_TYPE;
 
 /**
  * Implementation of {@link org.jclouds.apis.ApiMetadata} for Glance 1.0 API
@@ -74,9 +73,9 @@ public class GlanceApiMetadata extends BaseHttpApiMetadata<GlanceApi> {
          .defaultEndpoint("http://localhost:5000/v2.0/")
          .defaultProperties(GlanceApiMetadata.defaultProperties())
          .defaultModules(ImmutableSet.<Class<? extends Module>>builder()
-                                     .add(AuthenticationApiModule.class)
-                                     .add(KeystoneAuthenticationModule.class)
-                                     .add(RegionModule.class)
+                                     .add(AuthenticationModule.class)
+                                     .add(ServiceCatalogModule.class)
+                                     .add(ServiceCatalogModule.RegionModule.class)
                                      .add(GlanceHttpApiModule.class).build());
       }
 
